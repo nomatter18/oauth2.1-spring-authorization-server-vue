@@ -71,25 +71,6 @@ public class AuthorizationServerConfig {
 
         return new InMemoryRegisteredClientRepository(registeredClient);
     }
-    
-    @Bean
-    public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
-    	return context -> {
-//    		JwsHeader.Builder headers = context.getHeaders();
-//    		JwtClaimsSet.Builder claims = context.getClaims();
-    		Authentication principal = context.getPrincipal();
-			Set<String> authorities = principal.getAuthorities().stream()
-					.map(GrantedAuthority::getAuthority)
-					.collect(Collectors.toSet());
-			
-			
-    		if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN)) {
-    			context.getClaims().claim("authorities", authorities);
-    		} else if (context.getTokenType().getValue().equals(OidcParameterNames.ID_TOKEN)) {
-    			context.getClaims().claim("authorities", authorities);
-    		}
-    	};
-    }
 
 
     @Bean
